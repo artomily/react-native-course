@@ -1,14 +1,31 @@
-import { Text, View, ScrollView, Image } from "react-native";
+import { Text, View, ScrollView, Image, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 
 interface Pokemon {
   name: string;
   image: string;
   imageBack: string;
+  types: PokemonType[];
 }
+
+interface PokemonType {
+  type: {
+    name: string;
+    url: string;
+  };
+}
+
+const colorsByType = {
+  grass: "#78C850",
+  fire: "#F08030",
+  water: "#6890F0",
+  bug: "#A8B820",
+};
 
 export default function Index() {
   const [pokemons, setPokemon] = useState<Pokemon[]>([]);
+
+  // console.log(JSON.stringify(pokemons[0]), null, 2);
 
   useEffect(() => {
     fetchPokemons();
@@ -30,6 +47,7 @@ export default function Index() {
             name: pokemon.name,
             image: details.sprites.front_default,
             imageBack: details.sprites.back_default,
+            types: details.types,
           };
         })
       );
@@ -41,11 +59,21 @@ export default function Index() {
   }
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{ gap: 16, padding: 16 }}>
       {pokemons.map((pokemon) => (
-        <View key={pokemon.name}>
-          <Text>{pokemon.name}</Text>
-          <View style={{ flexDirection : "row" }}>
+        <View
+        key={pokemon.name}
+        style={{
+            //@ts-ignore
+            backgroundColor: colorsByType[pokemon.types[0].type.name] + 30,
+            padding: 20,
+            borderRadius: 20,
+          }}
+        >
+          <Text style={styles.name}>{pokemon.name}</Text>
+          <Text style={styles.type}>{pokemon.types[0].type.name}</Text>
+
+          <View style={{ flexDirection: "row" }}>
             <Image
               source={{ uri: pokemon.image }}
               style={{ width: 150, height: 150 }}
@@ -60,3 +88,18 @@ export default function Index() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  name: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+
+  },
+  type: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "gray",
+    textAlign: "center",
+  },
+});
