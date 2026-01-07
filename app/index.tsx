@@ -71,8 +71,8 @@ export default function Index() {
               borderRadius: 20,
             }}
           >
-            <Text style={styles.name}>{pokemon.name}</Text>
-            <Text style={styles.type}>{pokemon.types[0].type.name}</Text>
+            <Text className="text-2xl font-bold text-center">{pokemon.name}</Text>
+            <Text className="text-lg font-bold text-red-500 text-center">{pokemon.types[0].type.name}</Text>
 
             <View style={{ flexDirection: "row" }}>
               <Image
